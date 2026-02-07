@@ -19,9 +19,8 @@ let package = Package(
         .library(name: "OpenWindowDependency", targets: ["OpenWindowDependency"]),
         .library(name: "RequestReviewDependency", targets: ["RequestReviewDependency"]),
         .library(name: "SFSpeechDependency", targets: ["SFSpeechDependency"]),
-        .library(name: "SwiftUIEnvironmentDependencies", targets: ["SwiftUIEnvironmentDependencies"]),
         .library(name: "SystemSoundClient", targets: ["SystemSoundClient"]),
-        .library(name: "TCAEnhance", targets: ["TCAEnhance"]),
+        .library(name: "TCAComponents", targets: ["TCAComponents"]),
         .library(name: "UserNotificationsDependency", targets: ["UserNotificationsDependency"]),
     ],
     dependencies: [
@@ -86,9 +85,6 @@ let package = Package(
             ]
         ),
         .target(
-            name: "SwiftUIEnvironmentDependencies"
-        ),
-        .target(
             name: "SystemSoundClient",
             dependencies: [
                 .product(name: "Dependencies", package: "swift-dependencies"),
@@ -96,7 +92,7 @@ let package = Package(
             resources: [.process("Resources")]
         ),
         .target(
-            name: "TCAEnhance",
+            name: "TCAComponents",
             dependencies: [
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
