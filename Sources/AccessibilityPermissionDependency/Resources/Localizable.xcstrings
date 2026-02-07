@@ -1,0 +1,24 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Accessibility" : {
+
+    },
+    "Accessibility Permission" : {
+      "comment" : "the label for the accessibility switch"
+    },
+    "Cancel" : {
+
+    },
+    "Click Continue to navigate to macOS System Settings > Privacy & Security > Accessibility. \nLocate this app in the list, and enable the toggle switch next to it." : {
+
+    },
+    "Continue" : {
+
+    },
+    "System Settings…" : {
+      "comment" : "the button label to open macOS System Settings > Privacy&Security > Accessibility"
+    }
+  },
+  "version" : "1.0"
+}
