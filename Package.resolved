@@ -118,6 +118,15 @@
       }
     },
     {
+      "identity" : "usefulthings",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/atacan/UsefulThings",
+      "state" : {
+        "branch" : "main",
+        "revision" : "a20c6f78d1c105c74237818b372b947044657883"
+      }
+    },
+    {
       "identity" : "xctest-dynamic-overlay",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/xctest-dynamic-overlay",

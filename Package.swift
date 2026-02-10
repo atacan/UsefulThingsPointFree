@@ -12,17 +12,20 @@ let package = Package(
     products: [
         .library(name: "AccessibilityPermissionDependency", targets: ["AccessibilityPermissionDependency"]),
         .library(name: "ClipboardDependency", targets: ["ClipboardDependency"]),
+        .library(name: "DownloadFileClient", targets: ["DownloadFileClient"]),
+        .library(name: "FetchClient", targets: ["FetchClient"]),
         .library(name: "FilePanelsClient", targets: ["FilePanelsClient"]),
         .library(name: "FilesClient", targets: ["FilesClient"]),
         .library(name: "SwiftUIEnvironmentDependencies", targets: ["SwiftUIEnvironmentDependencies"]),
         .library(name: "SFSpeechDependency", targets: ["SFSpeechDependency"]),
         .library(name: "SystemSoundClient", targets: ["SystemSoundClient"]),
         .library(name: "TCAComponents", targets: ["TCAComponents"]),
-        .library(name: "UserNotificationsDependency", targets: ["UserNotificationsDependency"]),
+        .library(name: "UserNotificationsClient", targets: ["UserNotificationsClient"]),
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.6.2"),
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "1.17.0"),
+        .package(url: "https://github.com/atacan/UsefulThings", branch: "main"),
     ],
     targets: [
         .target(
@@ -38,6 +41,17 @@ let package = Package(
             dependencies: [
                 .product(name: "Dependencies", package: "swift-dependencies"),
             ]
+        ),
+        .target(
+            name: "DownloadFileClient",
+            dependencies: [
+                .product(name: "Dependencies", package: "swift-dependencies"),
+                .product(name: "DependenciesMacros", package: "swift-dependencies"),
+                .product(name: "UsefulThings", package: "UsefulThings"),
+            ]
+        ),
+        .target(
+            name: "FetchClient"
         ),
         .target(
             name: "FilePanelsClient",
@@ -77,7 +91,7 @@ let package = Package(
             ]
         ),
         .target(
-            name: "UserNotificationsDependency",
+            name: "UserNotificationsClient",
             dependencies: [
                 .product(name: "Dependencies", package: "swift-dependencies"),
                 .product(name: "DependenciesMacros", package: "swift-dependencies"),
