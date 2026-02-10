@@ -12,12 +12,9 @@ let package = Package(
     products: [
         .library(name: "AccessibilityPermissionDependency", targets: ["AccessibilityPermissionDependency"]),
         .library(name: "ClipboardDependency", targets: ["ClipboardDependency"]),
-        .library(name: "DismissDependency", targets: ["DismissDependency"]),
-        .library(name: "DismissWindowDependency", targets: ["DismissWindowDependency"]),
         .library(name: "FilePanelsClient", targets: ["FilePanelsClient"]),
         .library(name: "FilesClient", targets: ["FilesClient"]),
-        .library(name: "OpenWindowDependency", targets: ["OpenWindowDependency"]),
-        .library(name: "RequestReviewDependency", targets: ["RequestReviewDependency"]),
+        .library(name: "SwiftUIEnvironmentDependencies", targets: ["SwiftUIEnvironmentDependencies"]),
         .library(name: "SFSpeechDependency", targets: ["SFSpeechDependency"]),
         .library(name: "SystemSoundClient", targets: ["SystemSoundClient"]),
         .library(name: "TCAComponents", targets: ["TCAComponents"]),
@@ -43,18 +40,6 @@ let package = Package(
             ]
         ),
         .target(
-            name: "DismissDependency",
-            dependencies: [
-                .product(name: "Dependencies", package: "swift-dependencies"),
-            ]
-        ),
-        .target(
-            name: "DismissWindowDependency",
-            dependencies: [
-                .product(name: "Dependencies", package: "swift-dependencies"),
-            ]
-        ),
-        .target(
             name: "FilePanelsClient",
             dependencies: [
                 .product(name: "Dependencies", package: "swift-dependencies"),
@@ -67,13 +52,7 @@ let package = Package(
             ]
         ),
         .target(
-            name: "OpenWindowDependency",
-            dependencies: [
-                .product(name: "Dependencies", package: "swift-dependencies"),
-            ]
-        ),
-        .target(
-            name: "RequestReviewDependency",
+            name: "SwiftUIEnvironmentDependencies",
             dependencies: [
                 .product(name: "Dependencies", package: "swift-dependencies"),
             ]
