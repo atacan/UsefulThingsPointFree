@@ -75,13 +75,8 @@ final actor DownloadFile {
 
             downloadTask.resume()
 
-//            continuation.onTermination = {[weak self] _ in
-            continuation.onTermination = {[weak self] _ in
-                // guard let self = self else { return }
-                // self was nil when the task was cancelled
-                // we don't call self for the following
+            continuation.onTermination = { _ in
                 logger.debug("startDownloading continuation.onTermination")
-                //                    await self.finishTask()
                 downloadTask.cancel()
                 urlSession.invalidateAndCancel()
             }
