@@ -22,13 +22,14 @@ private enum DismissKey: DependencyKey {
 }
 
 public struct DismissEffect: Sendable {
-    private let handler: @Sendable () -> Void
-    
-    public init(handler: @escaping @Sendable () -> Void) {
+    private let handler: @Sendable @MainActor () -> Void
+
+    public init(handler: @escaping @Sendable @MainActor () -> Void) {
         self.handler = handler
     }
-    
-    public func callAsFunction() -> Void {
+
+    @MainActor
+    public func callAsFunction() {
         self.handler()
     }
 }

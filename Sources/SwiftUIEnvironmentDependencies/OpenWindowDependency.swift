@@ -22,13 +22,14 @@
   }
 
   public struct OpenWindowEffect: Sendable {
-      private let handler: @Sendable (_ id: String) -> Void
+      private let handler: @Sendable @MainActor (_ id: String) -> Void
 
-    public init(handler: @escaping @Sendable (String) -> Void) {
+    public init(handler: @escaping @Sendable @MainActor (String) -> Void) {
       self.handler = handler
     }
 
-      public func callAsFunction(id: String) -> Void {
+      @MainActor
+      public func callAsFunction(id: String) {
           self.handler(id)
     }
   }
