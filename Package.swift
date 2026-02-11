@@ -21,11 +21,13 @@ let package = Package(
         .library(name: "SystemSoundClient", targets: ["SystemSoundClient"]),
         .library(name: "TCAComponents", targets: ["TCAComponents"]),
         .library(name: "UserNotificationsClient", targets: ["UserNotificationsClient"]),
+        .library(name: "WebSocketDependency", targets: ["WebSocketDependency"]),
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.6.2"),
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "1.17.0"),
         .package(url: "https://github.com/atacan/UsefulThings", branch: "main"),
+        .package(url: "https://github.com/pointfreeco/swift-case-paths", from: "1.5.6"),
     ],
     targets: [
         .target(
@@ -95,6 +97,14 @@ let package = Package(
             dependencies: [
                 .product(name: "Dependencies", package: "swift-dependencies"),
                 .product(name: "DependenciesMacros", package: "swift-dependencies"),
+            ]
+        ),
+        .target(
+            name: "WebSocketDependency",
+            dependencies: [
+                .product(name: "Dependencies", package: "swift-dependencies"),
+                .product(name: "DependenciesMacros", package: "swift-dependencies"),
+                .product(name: "CasePaths", package: "swift-case-paths"),
             ]
         ),
     ]
