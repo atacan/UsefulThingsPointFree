@@ -3,6 +3,8 @@
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fatacan%2FUsefulThingsPointFree%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/atacan/UsefulThingsPointFree)
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fatacan%2FUsefulThingsPointFree%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/atacan/UsefulThingsPointFree)
 
+![code line count](https://img.shields.io/endpoint?url=https%3A%2F%2Fghloc.vercel.app%2Fapi%2Fatacan%2FUsefulThingsPointFree%2Fbadge%3Fformat%3Dhuman%26filter%3D.swift%24)
+
 A collection of ready-to-use [Swift Dependencies](https://github.com/pointfreeco/swift-dependencies) and [TCA](https://github.com/pointfreeco/swift-composable-architecture) utilities for macOS and iOS apps. One package, 12 independent libraries — import only what you need.
 
 ## Installation
