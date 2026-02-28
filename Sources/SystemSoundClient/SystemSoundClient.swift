@@ -1,5 +1,6 @@
 import AudioToolbox
 import Dependencies
+import Foundation
 
 #if os(macOS)
 import AppKit
@@ -8,6 +9,7 @@ import UIKit
 #endif
 
 public struct SystemSoundClient {
+    public var prepare: @Sendable ([SystemSound.Name]) -> Void
     public var play: @Sendable (SystemSound.Name) -> Void
 }
 
@@ -20,6 +22,9 @@ extension DependencyValues {
 
 extension SystemSoundClient: DependencyKey {
     public static let liveValue = Self(
+        prepare: { systemSoundNames in
+            SystemSound.prepare(systemSoundNames)
+        },
         play: { systemSoundName in
             SystemSound.play(systemSoundName)
         }
@@ -27,6 +32,9 @@ extension SystemSoundClient: DependencyKey {
 }
 
 public class SystemSound {
+    private static let cacheLock = NSLock()
+    private static var cachedSoundIDs: [String: SystemSoundID] = [:]
+
     /// Name
     public struct Name {
         #if os(macOS)
@@ -104,46 +112,88 @@ public class SystemSound {
         #endif
     }
 
+    public static func prepare(_ systemSoundNames: [Name]) {
+        for systemSoundName in systemSoundNames {
+            _ = resolvedSoundID(for: systemSoundName)
+        }
+    }
+
     /// Play given sound
     public static func play(_ systemSoundName: Name) {
+        guard let soundID = resolvedSoundID(for: systemSoundName) else {
+            return
+        }
+        AudioServicesPlaySystemSound(soundID)
+    }
+
+    private static func resolvedSoundID(for systemSoundName: Name) -> SystemSoundID? {
         #if os(macOS)
         if let soundID = systemSoundName.soundID {
-            // Use predefined sound ID
-            AudioServicesPlaySystemSound(soundID)
-        } else if let filepath = systemSoundName.filepath {
-            // Use file path for macOS system sounds
-            let url = URL(
-                fileURLWithPath: "/System/Library/Components/CoreAudio.component/Contents/SharedSupport/SystemSounds/\(filepath)"
-            )
-            var soundID: SystemSoundID = 0
-            let result = AudioServicesCreateSystemSoundID(url as CFURL, &soundID)
-            if result == noErr {
-                AudioServicesPlaySystemSound(soundID)
-                // Clean up the sound ID after a short delay
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    AudioServicesDisposeSystemSoundID(soundID)
+            return soundID
+        }
+        if let filepath = systemSoundName.filepath {
+            return cachedSoundID(forKey: filepath) {
+                // Use file path for macOS system sounds
+                let url = URL(
+                    fileURLWithPath: "/System/Library/Components/CoreAudio.component/Contents/SharedSupport/SystemSounds/\(filepath)"
+                )
+                var soundID: SystemSoundID = 0
+                let result = AudioServicesCreateSystemSoundID(url as CFURL, &soundID)
+                guard result == noErr else {
+                    return nil
                 }
+                return soundID
             }
         }
+        return nil
         #elseif os(iOS)
         if let soundID = systemSoundName.soundID {
-            // Use predefined sound ID
-            AudioServicesPlaySystemSound(soundID)
-        } else if let resourceFilename = systemSoundName.resourceFilename {
-            // Use bundled resource file
-            guard let url = Bundle.module.url(forResource: resourceFilename.replacingOccurrences(of: ".aif", with: "").replacingOccurrences(of: ".caf", with: ""), withExtension: resourceFilename.hasSuffix(".aif") ? "aif" : "caf") else {
-                return
-            }
-            var soundID: SystemSoundID = 0
-            let result = AudioServicesCreateSystemSoundID(url as CFURL, &soundID)
-            if result == noErr {
-                AudioServicesPlaySystemSound(soundID)
-                // Clean up the sound ID after a short delay
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    AudioServicesDisposeSystemSoundID(soundID)
+            return soundID
+        }
+        if let resourceFilename = systemSoundName.resourceFilename {
+            return cachedSoundID(forKey: resourceFilename) {
+                let basename = resourceFilename
+                    .replacingOccurrences(of: ".aif", with: "")
+                    .replacingOccurrences(of: ".caf", with: "")
+                let ext = resourceFilename.hasSuffix(".aif") ? "aif" : "caf"
+                guard let url = Bundle.module.url(forResource: basename, withExtension: ext) else {
+                    return nil
                 }
+                var soundID: SystemSoundID = 0
+                let result = AudioServicesCreateSystemSoundID(url as CFURL, &soundID)
+                guard result == noErr else {
+                    return nil
+                }
+                return soundID
             }
         }
+        return nil
         #endif
+    }
+
+    private static func cachedSoundID(
+        forKey key: String,
+        create: () -> SystemSoundID?
+    ) -> SystemSoundID? {
+        cacheLock.lock()
+        if let cached = cachedSoundIDs[key] {
+            cacheLock.unlock()
+            return cached
+        }
+        cacheLock.unlock()
+
+        guard let created = create() else {
+            return nil
+        }
+
+        cacheLock.lock()
+        if let cached = cachedSoundIDs[key] {
+            cacheLock.unlock()
+            AudioServicesDisposeSystemSoundID(created)
+            return cached
+        }
+        cachedSoundIDs[key] = created
+        cacheLock.unlock()
+        return created
     }
 }
