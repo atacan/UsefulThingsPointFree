@@ -6,8 +6,11 @@ let package = Package(
     name: "UsefulThingsPointFree",
     defaultLocalization: "en",
     platforms: [
-        .macOS(.v14),
-        .iOS(.v16),
+        .macOS("14.0"), 
+        .iOS("17.0"), 
+        .watchOS("10.0"), 
+        .tvOS("17.0"), 
+        .visionOS("1.0")
     ],
     products: [
         .library(name: "AccessibilityPermissionDependency", targets: ["AccessibilityPermissionDependency"]),
